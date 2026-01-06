@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { Lead, PipelineStage } from '../types';
 import { STAGES } from '../constants';
@@ -8,30 +8,60 @@ interface LeadModalProps {
   lead?: Lead;
   isOpen: boolean;
   onClose: () => void;
-  onSave: (lead: Lead) => void;
+  onSave: (lead: Partial<Lead>) => void;
 }
 
 export const LeadModal: React.FC<LeadModalProps> = ({ lead, isOpen, onClose, onSave }) => {
-  const [formData, setFormData] = useState<Partial<Lead>>(
-    lead || {
-      name: '',
-      company: '',
-      email: '',
-      value: 0,
-      stage: PipelineStage.PROSPECTING,
-      notes: ''
+  const [formData, setFormData] = useState<Partial<Lead>>({
+    name: '',
+    company: '',
+    email: '',
+    value: 0,
+    stage: PipelineStage.CONTACTER,
+    notes: ''
+  });
+
+  // Reset form when modal opens/closes or when lead changes
+  useEffect(() => {
+    if (isOpen) {
+      if (lead) {
+        setFormData({
+          name: lead.name || '',
+          company: lead.company || '',
+          email: lead.email || '',
+          value: lead.value || 0,
+          stage: lead.stage || PipelineStage.CONTACTER,
+          notes: lead.notes || ''
+        });
+      } else {
+        setFormData({
+          name: '',
+          company: '',
+          email: '',
+          value: 0,
+          stage: PipelineStage.CONTACTER,
+          notes: ''
+        });
+      }
     }
-  );
+  }, [isOpen, lead]);
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave({
-      id: lead?.id || Math.random().toString(36).substr(2, 9),
-      createdAt: lead?.createdAt || new Date().toISOString().split('T')[0],
-      ...(formData as Lead)
-    });
+    
+    // Ensure all required fields are present
+    const leadToSave: Partial<Lead> = {
+      name: formData.name || '',
+      company: formData.company || '',
+      email: formData.email || '',
+      value: formData.value || 0,
+      stage: formData.stage || PipelineStage.CONTACTER,
+      notes: formData.notes || ''
+    };
+    
+    onSave(leadToSave);
     onClose();
   };
 
@@ -88,21 +118,41 @@ export const LeadModal: React.FC<LeadModalProps> = ({ lead, isOpen, onClose, onS
             <div className="space-y-2">
               <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Value (USD)</label>
               <input 
-                type="number" 
+                type="text" 
                 required
+                placeholder="0.00"
                 className="w-full bg-white border border-gray-200 rounded-attio px-3 py-2 text-sm transition-all"
-                value={formData.value}
-                onChange={e => setFormData({ ...formData, value: Number(e.target.value) })}
+                value={formData.value ? formData.value.toLocaleString() : ''}
+                onChange={e => {
+                  // Remove all non-digit characters
+                  const raw = e.target.value.replace(/[^\d]/g, '');
+                  // Parse as integer, default to 0 if empty
+                  const num = raw === '' ? 0 : parseInt(raw, 10);
+                  setFormData({ ...formData, value: num });
+                }}
+                onBlur={e => {
+                  // Format on blur
+                  const num = formData.value || 0;
+                  e.target.value = num.toLocaleString();
+                }}
               />
             </div>
             <div className="space-y-2">
               <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Stage</label>
               <select 
                 className="w-full bg-white border border-gray-200 rounded-attio px-3 py-2 text-sm transition-all"
-                value={formData.stage}
+                value={formData.stage || PipelineStage.CONTACTER}
                 onChange={e => setFormData({ ...formData, stage: e.target.value as PipelineStage })}
+                required
               >
-                {STAGES.map(s => <option key={s} value={s}>{s}</option>)}
+                {STAGES.map(s => (
+                  <option key={s} value={s}>
+                    {s === PipelineStage.CONTACTER ? 'Contacter' :
+                     s === PipelineStage.QUALIFIED ? 'Qualified' :
+                     s === PipelineStage.NEGOTIATION ? 'Negotiation' :
+                     s === PipelineStage.CLOSED ? 'Closed' : s}
+                  </option>
+                ))}
               </select>
             </div>
           </div>

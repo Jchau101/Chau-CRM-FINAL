@@ -3,8 +3,17 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { NAVIGATION_ITEMS } from '../constants';
 import { ChevronDown, Search } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { supabase } from '../services/supabaseClient';
 
 export const Sidebar: React.FC = () => {
+  const { user } = useAuth();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    window.location.href = '/#/auth';
+  };
+
   return (
     <aside className="w-64 h-screen fixed left-0 top-0 bg-white border-r border-[#e5e5e5] flex flex-col z-40">
       <div className="p-4 mb-4">
@@ -49,15 +58,20 @@ export const Sidebar: React.FC = () => {
       </nav>
 
       <div className="mt-auto p-4 border-t border-[#e5e5e5]">
-        <div className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-attio transition-colors cursor-pointer group">
-          <div className="w-8 h-8 rounded-sm bg-gray-100 border border-gray-200 overflow-hidden">
-            <img src="https://picsum.photos/seed/user/100" alt="Avatar" className="w-full h-full object-cover" />
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 p-2 hover:bg-gray-50 rounded-attio transition-colors cursor-pointer group text-left"
+        >
+          <div className="w-8 h-8 rounded-sm bg-gray-100 border border-gray-200 flex items-center justify-center text-[10px] font-medium text-gray-700">
+            {user?.email?.[0]?.toUpperCase() ?? 'U'}
           </div>
           <div className="flex-1 overflow-hidden">
-            <p className="text-xs font-semibold text-gray-900 truncate">Alex Rivers</p>
-            <p className="text-[10px] text-gray-500">Chau Pro</p>
+            <p className="text-xs font-semibold text-gray-900 truncate">
+              {user?.email ?? 'Signed in'}
+            </p>
+            <p className="text-[10px] text-gray-500 group-hover:text-gray-600">Log out</p>
           </div>
-        </div>
+        </button>
       </div>
     </aside>
   );

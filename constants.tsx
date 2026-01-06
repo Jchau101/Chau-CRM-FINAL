@@ -13,21 +13,22 @@ import {
   Briefcase
 } from 'lucide-react';
 
+import { CheckSquare } from 'lucide-react';
+
 export const NAVIGATION_ITEMS = [
-  { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/' },
-  { name: 'Pipeline', icon: <Trello size={20} />, path: '/pipeline' },
-  { name: 'Leads', icon: <Users size={20} />, path: '/leads' },
-  { name: 'Billing', icon: <CreditCard size={20} />, path: '/billing' },
-  { name: 'Settings', icon: <Settings size={20} />, path: '/settings' },
+  { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/app/dashboard' },
+  { name: 'Pipeline', icon: <Trello size={20} />, path: '/app/pipeline' },
+  { name: 'Leads', icon: <Users size={20} />, path: '/app/leads' },
+  { name: 'Tasks', icon: <CheckSquare size={20} />, path: '/app/tasks' },
+  { name: 'Billing', icon: <CreditCard size={20} />, path: '/app/billing' },
+  { name: 'Settings', icon: <Settings size={20} />, path: '/app/settings' },
 ];
 
 export const STAGES = [
-  PipelineStage.PROSPECTING,
-  PipelineStage.CONTACTED,
-  PipelineStage.PROPOSAL,
+  PipelineStage.CONTACTER,
+  PipelineStage.QUALIFIED,
   PipelineStage.NEGOTIATION,
-  PipelineStage.WON,
-  PipelineStage.LOST,
+  PipelineStage.CLOSED,
 ];
 
 export const MOCK_LEADS: Lead[] = [
@@ -37,7 +38,7 @@ export const MOCK_LEADS: Lead[] = [
     company: 'Nexus Tech',
     email: 'sarah@nexustech.io',
     value: 12500,
-    stage: PipelineStage.PROSPECTING,
+    stage: PipelineStage.CONTACTER,
     notes: 'Inquiry from LinkedIn. Interested in enterprise plan.',
     createdAt: '2024-01-01',
     aiScore: 85
@@ -59,7 +60,7 @@ export const MOCK_LEADS: Lead[] = [
     company: 'Solstice Design',
     email: 'elena@solstice.studio',
     value: 8000,
-    stage: PipelineStage.WON,
+    stage: PipelineStage.CLOSED,
     notes: 'Closed on first call. 3-year contract signed.',
     createdAt: '2024-01-03',
     aiScore: 98
@@ -70,7 +71,7 @@ export const MOCK_LEADS: Lead[] = [
     company: 'Arbor Finance',
     email: 'dk@arbor.fi',
     value: 22000,
-    stage: PipelineStage.PROPOSAL,
+    stage: PipelineStage.QUALIFIED,
     notes: 'Sent proposal v2 yesterday.',
     createdAt: '2023-12-28',
     aiScore: 74
@@ -81,7 +82,7 @@ export const MOCK_LEADS: Lead[] = [
     company: 'CloudStream',
     email: 'jvance@cloudstream.co',
     value: 15000,
-    stage: PipelineStage.CONTACTED,
+    stage: PipelineStage.CONTACTER,
     notes: 'Waiting for call back on Thursday.',
     createdAt: '2024-01-02',
     aiScore: 68
