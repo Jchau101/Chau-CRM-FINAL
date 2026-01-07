@@ -50,11 +50,11 @@ export const AuthPage: React.FC = () => {
     <div className="min-h-screen bg-[#fcfcfc] flex items-center justify-center px-6">
       <div className="w-full max-w-md rounded-xl bg-white/80 border border-black/5 shadow-lg shadow-black/5 backdrop-blur p-8 space-y-6">
         <div className="space-y-2 text-center">
-          <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-black text-white text-xs font-semibold">
-            L
+          <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-black">
+            <span className="text-white font-bold text-xs">C</span>
           </div>
           <h1 className="text-xl font-medium text-neutral-900">
-            {mode === 'signup' ? 'Create your Lumin account' : 'Welcome back'}
+            {mode === 'signup' ? 'Create your Chau account' : 'Welcome back'}
           </h1>
           <p className="text-xs text-neutral-500">
             {mode === 'signup'

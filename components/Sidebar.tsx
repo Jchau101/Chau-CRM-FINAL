@@ -18,7 +18,9 @@ export const Sidebar: React.FC = () => {
     <aside className="w-64 h-screen fixed left-0 top-0 bg-white border-r border-[#e5e5e5] flex flex-col z-40">
       <div className="p-4 mb-4">
         <div className="flex items-center gap-3 px-2 py-1.5 hover:bg-gray-50 rounded-attio cursor-pointer transition-colors border border-transparent hover:border-gray-200">
-          <div className="chau-logo shadow-sm"></div>
+          <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center shadow-lg">
+            <span className="text-white font-bold text-sm">C</span>
+          </div>
           <span className="text-sm font-bold tracking-tight text-gray-900">Chau</span>
           <ChevronDown size={14} className="ml-auto text-gray-400" />
         </div>

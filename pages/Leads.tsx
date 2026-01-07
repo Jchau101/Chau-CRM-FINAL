@@ -63,7 +63,7 @@ export const Leads: React.FC = () => {
 
   const handleExport = () => {
     const csvContent = csvService.exportToCSV(filteredLeads);
-    const filename = `Lumin_Leads_${new Date().toISOString().split('T')[0]}.csv`;
+    const filename = `Chau_Leads_${new Date().toISOString().split('T')[0]}.csv`;
     csvService.downloadCSV(csvContent, filename);
   };
 
